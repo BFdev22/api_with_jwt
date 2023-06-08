@@ -1,0 +1,7 @@
+{
+    "name": "TodosApi",
+    "version": "1.0.0",
+    "description": "API docs",
+    "title": "Todos API",
+    "url" : "http://localhost:8080"
+}

@@ -22,7 +22,7 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 app.use('/api', routes)
-app.use("/todos", TodoRouter) // send all "/todos" request to TodoROuter
+app.use("/api/todos", TodoRouter) // send all "/todos" request to TodoROuter
 
 const PORT = process.env.PORT;
 
