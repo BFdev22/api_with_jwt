@@ -48,7 +48,7 @@ router.post('/login', async (req, res) => {
 router.post('/post', async (req, res) => {
     const data = new Model({
         name: req.body.name,
-        age: req.body.age
+        password: req.body.password
     })
 
     try {
@@ -58,7 +58,7 @@ router.post('/post', async (req, res) => {
     catch (error) {
         res.status(400).json({message: error.message})
     }
-})
+});
 
 //Get all Method
 router.get('/getAll', async (req, res) => {

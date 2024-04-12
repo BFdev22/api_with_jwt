@@ -7,7 +7,7 @@ const router = Router();
 router.get("/", isLoggedIn, async (req, res) => {
     try{
         const data = await Todo.find();
-        res.json(data)
+        res.status(200).json(data)
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -49,7 +49,7 @@ router.put("/:id", isLoggedIn, async (req, res) => {
             id, updatedData, options
         )
 
-        res.send(result)
+        res.status(200).json(result);
     }
     catch (error) {
         res.status(400).json({ message: error.message })
