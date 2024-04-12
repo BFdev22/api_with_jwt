@@ -13,6 +13,7 @@ describe('POST /login', () => {
         const response = await request(app)
             .post('/api/login')
             .send({ name: "flo", password: "flo" });
+        expect(response.status).toBe(200);
 
         // parser le resultat
         const jsonResponse = JSON.parse(response.text);
@@ -32,6 +33,8 @@ describe('GET /todos', () => {
         const response = await request(app)
             .get('/api/todos/')
             .set('Authorization', 'Bearer ' + token);
+        
+        expect(response.status).toBe(200);
 
         if(response.status == 200){
             console.log(response.body);
@@ -49,6 +52,8 @@ describe('PUT /todo/id', () => {
             .put('/api/todos/' + idTodo)
             .set('Authorization', 'Bearer ' + token)
             .send({ completed: false });
+
+        expect(response.status).toBe(200);
 
         const jsonResponse = JSON.stringify(response.text);
         
