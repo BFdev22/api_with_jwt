@@ -21,7 +21,7 @@ unit-tests-job:
   script:
     - echo "Lancement des tests unitaires...cela prendra 60secondes"
     - npm install
-    - npm run test:watch
+    - npm run test
     - echo "La couverture de code est de 90%"
   
 deploy-job:
