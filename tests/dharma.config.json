@@ -1,0 +1,33 @@
+{
+    "targets": [
+        {
+            "name": "Login API",
+            "url": "http://localhost:3000/api/login",
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": {
+                "name": "string",
+                "password": "string"
+            }
+        },
+        {
+            "name": "Todos API",
+            "url": "http://localhost:3000/api/todos",
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer <token>"
+            },
+            "body": {
+                "username": "string",
+                "reminder": "string",
+                "completed": "boolean"
+            }
+        }
+    ],
+    "maxRequests": 1000,
+    "maxDuration": "5m",
+    "maxConcurrentRequests": 10
+}
