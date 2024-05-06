@@ -17,7 +17,7 @@ build-job:
     - echo "Compilation terminée"
 
 unit-tests-job:
-  stage: test
+  stage: tests
   script:
     - echo "Lancement des tests unitaires...cela prendra 60secondes"
     - npm install
