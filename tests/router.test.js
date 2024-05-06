@@ -4,20 +4,10 @@ const request  = require('supertest');
 
 var token = "";
 var idTodo;
-let server;
+
 
 // test login
 describe('POST /login', () => {
-    // Avant d'exécuter les tests, démarrez le serveur Express
-    beforeAll(done => {
-        server = app.listen(done);
-    });
-
-    // Après l'exécution des tests, fermez le serveur Express
-    afterAll(done => {
-        server.close(done);
-    });
-
     it('devrait connecter un utilisateur', async () => {
 
         // faire la requete pour l'authentification
@@ -75,5 +65,3 @@ describe('PUT /todo/id', () => {
         }   
     });
 });
-
-
