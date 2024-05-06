@@ -29,7 +29,7 @@ deploy-job:
   image: ruby:latest
   script:
     - echo "Déploiement de l'application..."
-    - ssh user@localhost "cd Users\tibre\api_with_jwt> && git pull origin main && npm install && npm run build && pm2 restart app"
+    - ssh user@localhost "cd Users\tibre\api_with_jwt && git pull origin main && npm install && npm run build && pm2 restart app"
   environment:
     name: local
   only:
