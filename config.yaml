@@ -1,0 +1,33 @@
+config:
+  target: "http://localhost:3000" # L'URL de base de votre application
+  phases:
+    - duration: 60 # Durée de chaque phase de test (en secondes)
+      arrivalRate: 10 # Taux d'arrivée des utilisateurs (nombre de requêtes par seconde)
+  defaults:
+    headers:
+      Content-Type: "application/json" # Les en-têtes par défaut pour toutes les requêtes
+
+scenarios:
+  - flow:
+      - post:
+          url: "/api/login" # URL de l'API de login
+          json:
+            name: "flo" # Données de login
+            password: "flo"
+      - get:
+          url: "/api/todos" # URL de l'API de récupération de todos
+          headers:
+            Authorization: "Bearer {{ auth_token }}" # Utilisation du jeton d'authentification reçu lors de la connexion
+      - put:
+          url: "/api/todos/648054f7ec79c069c0fd8cc3"
+          json:
+            username: "Modifier fonctionnalités"
+            reminder: "today"
+            completed: true
+          headers:
+            Authorization: "Bearer {{ auth_token }}"
+      - delete:
+          url: "/api/getOne/6476fbbf98c6fc009f4ca95b"
+          headers:
+            Authorization: "Bearer {{ auth_token }}"
+
