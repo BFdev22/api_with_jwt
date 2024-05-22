@@ -1,16 +1,17 @@
 const { Router } = require("express"); // import Router from express
 const Todo = require("../models/todo"); // import Todo model
 const { isLoggedIn } = require("./middleware");
+const { body, validationResult } = require('express-validator');
 
 const router = Router();
 
 router.get("/", isLoggedIn, async (req, res) => {
+
     try{
         const data = await Todo.find();
-        res.status(200).json(data)
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
+        res.status(200).json(data);
+    }catch(error){
+        res.status(500).json({ message: error.message });
     }
 });
 
@@ -24,18 +25,31 @@ router.get("/:id", isLoggedIn, async (req, res) => {
     }
 });
   
-router.post("/", isLoggedIn, async (req, res) => {
+router.post("/", isLoggedIn, [
+    // Validation et assainissement
+    body('username').isString().trim().not().isEmpty().escape(),
+    body('reminder').isString().trim().not().isEmpty().escape(),
+    body('completed').isBoolean()
+], async (req, res) => {
+
+    // Gestion des erreurs de validation
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     const data = new Todo({
         username: req.body.username,
         reminder: req.body.reminder,
-        complete: req.body.complete
-    })
+        completed: req.body.completed
+    });
+
     try {
         const dataToSave = await data.save();
         res.status(200).json(dataToSave)
     }
     catch (error) {
-        res.status(400).json({message: error.message})
+        res.status(400).json({ message: error.message })
     }
 });
 

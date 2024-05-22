@@ -1,0 +1,15 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      name: "60 seconds test with 10 requests per second"
+  headers:
+    Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTYyODg5NDF9.KNI9YeTYHersivF1b8rXXujLOQ8x1MgoOXmURQKB_3k"
+scenarios:
+  - flow:
+      - post:
+          url: "/api/todos"
+          json:
+            - { username: "John Doe", reminder: "Buy groceries", completed: false }
+            - { username: "Jane Smith", reminder: "Finish project", completed: false }

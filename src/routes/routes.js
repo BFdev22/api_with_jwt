@@ -4,6 +4,7 @@ const Model = require('../models/model');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { SECRET = "secret" } = process.env;
+const { body, validationResult } = require('express-validator');
 
 router.post('/signup', async (req, res) => {
     const data = new Model({
@@ -18,7 +19,16 @@ router.post('/signup', async (req, res) => {
     }
 })
 
-router.post('/login', async (req, res) => {
+router.post('/login', [
+    body('name').isString().trim().not().isEmpty().escape(),
+    body('password').isString().trim().not().isEmpty().escape(),
+], async (req, res) => {
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({ errors: errors.array() });
+    }
+    
     const data = new Model({
         name: req.body.name,
         password: req.body.password
@@ -44,6 +54,7 @@ router.post('/login', async (req, res) => {
         res.status(400).json({message: error.message});
       }
 })
+
 //Post Method
 router.post('/post', async (req, res) => {
     const data = new Model({

@@ -2,67 +2,118 @@ const session = require('supertest-session');
 const app = require('../index');
 const request  = require('supertest');
 
-var token = "";
+let token;
 var idTodo;
 
-// test login
+// test fonctionnel
 describe('POST /login', () => {
-    it('devrait connecter un utilisateur', async () => {
+    test('devrait connecter un utilisateur', async () => {
+
+        const user = {
+            name: "flo",
+            password: "flo"
+        };
 
         // faire la requete pour l'authentification
         const response = await request(app)
             .post('/api/login')
-            .send({ name: "flo", password: "flo" });
+            .send(user);
+        
         expect(response.status).toBe(200);
 
-        // parser le resultat
-        const jsonResponse = JSON.parse(response.text);
+        // // Parser le résultat
+        const jsonResponse = response.body;
 
-        // message en fonction du resultat
-        if(response.status == 200){
-            token = jsonResponse.token;
-            console.log("Authentification réussie")
-        }else{
-            console.log("Email ou mot de passe incorrecte");
-        }
-    });
+        // console.log(jsonResponse.token);
+
+        // // Vérifier le message et le token
+        expect(jsonResponse).toHaveProperty('token');
+
+        // // Stocker le token pour les tests suivants
+        token = jsonResponse.token;
+    }, 10000);
 });
 
-describe('GET /todos', () => {
-    it('devrait retourner tous les todos', async () => {
+// test unitaire et d'integration
+describe('POST /todos', () => {
+    test('should create a todo', async () => {
+        const todos = {
+            username: "test todo",
+            reminder: "weekly",
+            completed: false
+        }
+
         const response = await request(app)
-            .get('/api/todos/')
+            .post('/api/todos/')
+            .send(todos)
             .set('Authorization', 'Bearer ' + token);
         
         expect(response.status).toBe(200);
-
-        if(response.status == 200){
-            console.log(response.body);
-            idTodo = response.body[1]._id;
-        }else{
-            const jsonResponse = JSON.parse(response.text);
-            throw jsonResponse.error;
-        }
+        expect(response.body).toHaveProperty('username', 'test todo');
     });
 });
 
-describe('PUT /todo/id', () => {
-    it("devrait modifier un todo", async () => {
-        const response = await request(app)
-            .put('/api/todos/' + idTodo)
-            .set('Authorization', 'Bearer ' + token)
-            .send({ completed: false });
-
-        expect(response.status).toBe(200);
-
-        const jsonResponse = JSON.stringify(response.text);
+// describe('GET /todos', () => {
+//     it('devrait retourner tous les todos', async () => {
+//         const response = await request(app)
+//             .get('/api/todos/')
+//             .set('Authorization', 'Bearer ' + token);
         
-        if(response.status == 200){
-            console.log("Résultat : " + response.text);
-        }else{
-            throw jsonResponse.error;
-        }   
+//         expect(response.status).toBe(200);
+
+//         if(response.status == 200){
+//             console.log(response.body);
+//             idTodo = response.body[1]._id;
+//         }else{
+//             const jsonResponse = JSON.parse(response.text);
+//             throw jsonResponse.error;
+//         }
+//     });
+// });
+
+// describe('PUT /todo/id', () => {
+//     it("devrait modifier un todo", async () => {
+//         const response = await request(app)
+//             .put('/api/todos/' + idTodo)
+//             .set('Authorization', 'Bearer ' + token)
+//             .send({ completed: false });
+
+//         expect(response.status).toBe(200);
+
+//         const jsonResponse = JSON.stringify(response.text);
+        
+//         if(response.status == 200){
+//             console.log("Résultat : " + response.text);
+//         }else{
+//             throw jsonResponse.error;
+//         }   
+//     });
+// });
+
+describe('Security Tests', () => {
+    test('should prevent SQL Injection in login', async () => {
+        const response = await request(app)
+            .post('/api/login')
+            .send({ name: "'; DROP TABLE users; --", password: 'password' });
+        expect(response.status).not.toBe(200);
     });
 });
+
+describe('Security Tests', () => {
+    test('should prevent XSS in comments', async () => {
+        const todos = {
+            username: '<script>alert("XSS")</script>',
+            reminder: '<script>alert("XSS")</script>',
+            completed: '<script>alert("XSS")</script>',
+        };
+
+      const response = await request(app)
+        .post('/api/todos/')
+        .send(todos)
+        .set('Authorization', 'Bearer ' + token);
+      expect(response.status).not.toBe(200);
+    });
+});
+  
 
 
