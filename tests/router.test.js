@@ -1,10 +1,20 @@
 const session = require('supertest-session');
-const app = require('../index');
+const { app, server } = require('../index');
 const request  = require('supertest');
 
 let token;
 var idTodo;
 
+const PORT = process.env.PORT;
+
+// Fermer le serveur Express lorsque les tests sont terminés
+afterAll(done => {
+    // Arrêter le serveur Express
+    server.close(() => {
+        console.log('Server closed');
+        done();
+    });
+});
 
 // test fonctionnel
 describe('POST /login', () => {

@@ -26,8 +26,8 @@ app.use("/api/todos", TodoRouter) // send all "/todos" request to TodoROuter
 
 const PORT = process.env.PORT;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server Started at ${PORT}`)
-})
+});
 
-module.exports = app;
+module.exports = { app, server };
