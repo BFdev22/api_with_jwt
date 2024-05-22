@@ -1,4 +1,4 @@
-# API_NodeJs
+# Deploiement
 
 
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://gitlab.com/cda1392419/API_NodeJs.git
+git remote add origin https://gitlab.com/cda1392419/deploiement.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.com/cda1392419/API_NodeJs/-/settings/integrations)
+- [ ] [Set up project integrations](https://gitlab.com/cda1392419/deploiement/-/settings/integrations)
 
 ## Collaborate with your team
 
